@@ -145,6 +145,62 @@
       border: 1px solid rgba(255,255,255,.08);
       color: #8b949e;
     }
+
+    /* ── Pipeline hero visual ────────────────────────── */
+    .pipeline-visual {
+      background: rgba(22,27,34,.9);
+      border: 1px solid rgba(48,54,61,.9);
+      border-radius: 16px; padding: 20px 24px;
+      display: flex; flex-direction: column; gap: 0;
+    }
+    .pipe-node {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 10px; border-radius: 10px;
+      transition: background .2s;
+    }
+    .pipe-node:hover { background: rgba(255,255,255,.04); }
+    .pipe-node-dot {
+      width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+    }
+    .pipe-connector {
+      width: 10px; height: 16px; flex-shrink: 0;
+      border-left: 2px dashed rgba(48,54,61,.8);
+      margin-left: 4px;
+    }
+    .pipe-node-label {
+      font-size: .68rem; font-weight: 800; text-transform: uppercase;
+      letter-spacing: .08em; width: 4.5rem; flex-shrink: 0;
+    }
+    .pipe-node-name { font-size: .85rem; font-weight: 700; color: #e6edf3; }
+    .pipe-node-snippet {
+      font-size: .68rem; font-family: 'JetBrains Mono', monospace;
+      color: #8b949e; margin-left: auto; text-align: right;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      max-width: 160px;
+    }
+
+    /* ── Tool card preview snippet ───────────────────── */
+    .tool-preview {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .67rem; line-height: 1.5;
+      padding: 8px 10px; border-radius: 8px;
+      background: rgba(0,0,0,.3);
+      border: 1px solid rgba(48,54,61,.6);
+      color: #8b949e; margin-top: 4px;
+    }
+
+    /* ── SecPrior featured ───────────────────────────── */
+    .secprior-featured {
+      background: rgba(22,27,34,.8);
+      border: 1px solid rgba(48,54,61,.8);
+      border-radius: 14px; padding: 28px 32px;
+      position: relative; overflow: hidden;
+    }
+    .secprior-featured::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, #a78bfa, #818cf8, #6366f1);
+    }
   </style>
 </head>
 <body class="bg-grid">
@@ -181,25 +237,60 @@
       <span class="stat-badge">MIT License</span>
     </div>
 
-    <!-- Pipeline pills -->
-    <div class="fade-up-4 flex flex-wrap items-center justify-center gap-2 mb-12">
-      <a href="https://dgiry.github.io/defang-ioc" target="_blank" rel="noopener"
-         class="flow-pill" style="--pill-color:#22d3ee">🧪 Extract</a>
-      <div class="flow-arrow">→</div>
-      <a href="https://dgiry.github.io/ioc-pivot" target="_blank" rel="noopener"
-         class="flow-pill" style="--pill-color:#818cf8">🔭 Pivot</a>
-      <div class="flow-arrow">→</div>
-      <a href="https://dgiry.github.io/cve-enricher" target="_blank" rel="noopener"
-         class="flow-pill" style="--pill-color:#fb7185">🔬 Enrich</a>
-      <div class="flow-arrow">→</div>
-      <a href="https://dgiry.github.io/alert-explainer" target="_blank" rel="noopener"
-         class="flow-pill" style="--pill-color:#f85149">🚨 Explain</a>
-      <div class="flow-arrow">→</div>
-      <a href="https://dgiry.github.io/sigma-generator" target="_blank" rel="noopener"
-         class="flow-pill" style="--pill-color:#58a6ff">✍️ Detect</a>
-      <div class="flow-arrow">→</div>
-      <a href="https://dgiry.github.io/playbook-builder" target="_blank" rel="noopener"
-         class="flow-pill" style="--pill-color:#f0883e">📖 Respond</a>
+    <!-- Pipeline hero visual -->
+    <div class="fade-up-4 w-full max-w-2xl mb-10 text-left">
+      <div class="pipeline-visual">
+        <!-- Header -->
+        <div class="text-xs font-bold tracking-widest uppercase text-slate-600 mb-3 px-2">Full analyst workflow</div>
+
+        <!-- Nodes -->
+        <a href="https://dgiry.github.io/defang-ioc" target="_blank" rel="noopener" class="pipe-node" style="text-decoration:none">
+          <div class="pipe-node-dot" style="background:#22d3ee;box-shadow:0 0 6px #22d3ee88"></div>
+          <span class="pipe-node-label" style="color:#22d3ee">Extract</span>
+          <span class="pipe-node-name">🧪 Defang IOC</span>
+          <span class="pipe-node-snippet">hxxp://evil[.]com · 192[.]168[.]1[.]1</span>
+        </a>
+        <div class="pipe-connector"></div>
+
+        <a href="https://dgiry.github.io/ioc-pivot" target="_blank" rel="noopener" class="pipe-node" style="text-decoration:none">
+          <div class="pipe-node-dot" style="background:#818cf8;box-shadow:0 0 6px #818cf888"></div>
+          <span class="pipe-node-label" style="color:#818cf8">Pivot</span>
+          <span class="pipe-node-name">🔭 IOC Pivot Hub</span>
+          <span class="pipe-node-snippet">VT · Shodan · AbuseIPDB · 30+</span>
+        </a>
+        <div class="pipe-connector"></div>
+
+        <a href="https://dgiry.github.io/cve-enricher" target="_blank" rel="noopener" class="pipe-node" style="text-decoration:none">
+          <div class="pipe-node-dot" style="background:#fb7185;box-shadow:0 0 6px #fb718588"></div>
+          <span class="pipe-node-label" style="color:#fb7185">Enrich</span>
+          <span class="pipe-node-name">🔬 CVE Enricher</span>
+          <span class="pipe-node-snippet">CVSS 9.8 · KEV · Patch now</span>
+        </a>
+        <div class="pipe-connector"></div>
+
+        <a href="https://dgiry.github.io/alert-explainer" target="_blank" rel="noopener" class="pipe-node" style="text-decoration:none">
+          <div class="pipe-node-dot" style="background:#f85149;box-shadow:0 0 6px #f8514988"></div>
+          <span class="pipe-node-label" style="color:#f85149">Explain</span>
+          <span class="pipe-node-name">🚨 Alert Explainer</span>
+          <span class="pipe-node-snippet">T1059.001 · Priority: High</span>
+        </a>
+        <div class="pipe-connector"></div>
+
+        <a href="https://dgiry.github.io/sigma-generator" target="_blank" rel="noopener" class="pipe-node" style="text-decoration:none">
+          <div class="pipe-node-dot" style="background:#58a6ff;box-shadow:0 0 6px #58a6ff88"></div>
+          <span class="pipe-node-label" style="color:#58a6ff">Detect</span>
+          <span class="pipe-node-name">✍️ SIGMA Generator</span>
+          <span class="pipe-node-snippet">detection: · Image|endswith: ps</span>
+        </a>
+        <div class="pipe-connector"></div>
+
+        <a href="https://dgiry.github.io/playbook-builder" target="_blank" rel="noopener" class="pipe-node" style="text-decoration:none">
+          <div class="pipe-node-dot" style="background:#f0883e;box-shadow:0 0 6px #f0883e88"></div>
+          <span class="pipe-node-label" style="color:#f0883e">Respond</span>
+          <span class="pipe-node-name">📖 Playbook Builder</span>
+          <span class="pipe-node-snippet">6 phases · Steps + commands</span>
+        </a>
+      </div>
     </div>
 
     <!-- CTA -->
@@ -236,6 +327,10 @@
           <span class="tool-io-arr">→</span>
           <span class="tool-io-out" style="color:#22d3ee">Defanged IOCs</span>
         </div>
+        <div class="tool-preview">
+          <span style="color:#22d3ee">hxxp</span>://evil[.]com/drop<br>
+          192[.]168[.]1[.]1 · d41d8cd98f[…]
+        </div>
         <div class="tool-cta" style="color:#22d3ee">Open Defang IOC →</div>
       </a>
 
@@ -250,6 +345,10 @@
           <span class="tool-io-in">IP / domain / hash</span>
           <span class="tool-io-arr">→</span>
           <span class="tool-io-out" style="color:#818cf8">30+ intel links</span>
+        </div>
+        <div class="tool-preview">
+          <span style="color:#818cf8">VirusTotal</span> · Shodan · AbuseIPDB<br>
+          URLhaus · Censys · GreyNoise · OTX…
         </div>
         <div class="tool-cta" style="color:#818cf8">Open IOC Pivot →</div>
       </a>
@@ -266,6 +365,10 @@
           <span class="tool-io-arr">→</span>
           <span class="tool-io-out" style="color:#fb7185">Patch priority + actors</span>
         </div>
+        <div class="tool-preview">
+          CVSS <span style="color:#fb7185">9.8</span> · KEV ✓ · <span style="color:#fb7185">Patch now</span><br>
+          Actors: LockBit · FIN7 · APT41
+        </div>
         <div class="tool-cta" style="color:#fb7185">Open CVE Enricher →</div>
       </a>
 
@@ -280,6 +383,10 @@
           <span class="tool-io-in">SIEM alert</span>
           <span class="tool-io-arr">→</span>
           <span class="tool-io-out" style="color:#f85149">Triage + MITRE mapping</span>
+        </div>
+        <div class="tool-preview">
+          <span style="color:#f85149">T1059.001</span> PowerShell Execution<br>
+          Priority: High · FP risk: Low
         </div>
         <div class="tool-cta" style="color:#f85149">Open Alert Explainer →</div>
       </a>
@@ -296,6 +403,11 @@
           <span class="tool-io-arr">→</span>
           <span class="tool-io-out" style="color:#58a6ff">SIGMA · SPL · KQL · XDR</span>
         </div>
+        <div class="tool-preview">
+          <span style="color:#58a6ff">detection:</span><br>
+          &nbsp;&nbsp;Image|endswith: '\powershell.exe'<br>
+          &nbsp;&nbsp;CommandLine|contains: 'IEX'
+        </div>
         <div class="tool-cta" style="color:#58a6ff">Open SIGMA Generator →</div>
       </a>
 
@@ -310,6 +422,10 @@
           <span class="tool-io-in">MITRE / incident / SIGMA</span>
           <span class="tool-io-arr">→</span>
           <span class="tool-io-out" style="color:#f0883e">6-phase IR draft</span>
+        </div>
+        <div class="tool-preview">
+          <span style="color:#f0883e">🛡️ Containment</span> — step 1/4<br>
+          Isolate host · Block C2 · Revoke sessions
         </div>
         <div class="tool-cta" style="color:#f0883e">Open Playbook Builder →</div>
       </a>
@@ -347,37 +463,65 @@
 
   </section>
 
-  <!-- ── Also built ─────────────────────────────────────────────── -->
+  <!-- ── SecPrior featured ─────────────────────────────────────── -->
   <section class="max-w-6xl mx-auto px-6 pb-24">
 
     <div class="text-center mb-10">
       <div class="text-xs font-bold tracking-widest uppercase mb-3 text-slate-500">Also built</div>
-      <h2 class="text-2xl sm:text-3xl font-black tracking-tight">Related tools</h2>
+      <h2 class="text-2xl sm:text-3xl font-black tracking-tight">Flagship platform</h2>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-2xl mx-auto">
+    <div class="secprior-featured">
+      <div class="flex flex-col sm:flex-row sm:items-center gap-6">
 
-      <div class="secprior-card">
-        <div class="text-2xl mb-2">🎯</div>
-        <div class="font-bold text-white mb-1">SecPrior</div>
-        <p class="text-sm text-slate-500 leading-relaxed">Vulnerability prioritization and risk scoring. Helps security teams focus remediation effort on what matters most.</p>
-        <a href="https://dgiry.github.io/secprior" target="_blank" rel="noopener"
-           class="text-xs font-bold text-slate-400 hover:text-white transition-colors mt-3 inline-block">
-          Open SecPrior →
-        </a>
+        <!-- Left: identity -->
+        <div class="flex-shrink-0">
+          <div class="text-4xl mb-3">🎯</div>
+          <div class="flex items-center gap-3 mb-1">
+            <span class="text-xl font-black text-white">SecPrior</span>
+            <span class="text-xs font-black tracking-widest uppercase px-2 py-0.5 rounded"
+                  style="background:rgba(167,139,250,.1);color:#a78bfa;border:1px solid rgba(167,139,250,.25)">Flagship</span>
+          </div>
+          <div class="text-xs text-slate-500 font-mono">dgiry.github.io/secprior</div>
+        </div>
+
+        <!-- Divider -->
+        <div class="hidden sm:block w-px self-stretch" style="background:rgba(48,54,61,.8)"></div>
+
+        <!-- Center: description -->
+        <div class="flex-1">
+          <p class="text-sm text-slate-300 leading-relaxed mb-3">
+            Vulnerability prioritization and risk scoring platform. Helps security teams cut through CVE noise and focus remediation effort on what actually matters — combining CVSS, KEV status, exploitability, and business context into a single actionable priority score.
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <span class="text-xs px-2 py-1 rounded font-semibold font-mono" style="background:rgba(167,139,250,.08);color:#a78bfa;border:1px solid rgba(167,139,250,.2)">Risk scoring</span>
+            <span class="text-xs px-2 py-1 rounded font-semibold font-mono" style="background:rgba(167,139,250,.08);color:#a78bfa;border:1px solid rgba(167,139,250,.2)">KEV integration</span>
+            <span class="text-xs px-2 py-1 rounded font-semibold font-mono" style="background:rgba(167,139,250,.08);color:#a78bfa;border:1px solid rgba(167,139,250,.2)">Exploit context</span>
+            <span class="text-xs px-2 py-1 rounded font-semibold font-mono" style="background:rgba(167,139,250,.08);color:#a78bfa;border:1px solid rgba(167,139,250,.2)">100% client-side</span>
+          </div>
+        </div>
+
+        <!-- Right: CTA -->
+        <div class="flex-shrink-0">
+          <a href="https://dgiry.github.io/secprior" target="_blank" rel="noopener"
+             class="inline-flex items-center gap-2 px-5 py-3 rounded-lg font-bold text-sm transition-opacity hover:opacity-80"
+             style="background:rgba(167,139,250,.12);color:#a78bfa;border:1px solid rgba(167,139,250,.3)">
+            Open SecPrior →
+          </a>
+        </div>
+
       </div>
+    </div>
 
-      <div class="secprior-card" style="border-style:dashed;opacity:.5">
-        <div class="text-2xl mb-2">🔧</div>
-        <div class="font-bold text-white mb-1">More coming</div>
-        <p class="text-sm text-slate-500 leading-relaxed">The suite keeps growing. Star the GitHub repo to follow along.</p>
+    <!-- More coming -->
+    <div class="mt-4 text-center">
+      <p class="text-xs text-slate-700">
+        More tools in the pipeline ·
         <a href="https://github.com/dgiry" target="_blank" rel="noopener"
-           class="text-xs font-bold text-slate-400 hover:text-white transition-colors mt-3 inline-block">
-          Follow on GitHub →
-        </a>
-      </div>
-
+           class="hover:text-slate-500 transition-colors">Follow on GitHub →</a>
+      </p>
     </div>
+
   </section>
 
   <!-- ── Final CTA ──────────────────────────────────────────────── -->
