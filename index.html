@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SecOps AI Suite — Client-side security tools by dgiry</title>
+  <meta name="description" content="Six free, client-side SecOps tools: Extract IOCs, pivot to 30+ intel platforms, enrich CVEs, explain SIEM alerts, generate SIGMA rules, and build IR playbook drafts. No server. No telemetry.">
+  <meta property="og:title" content="SecOps AI Suite — Client-side security tools by dgiry">
+  <meta property="og:description" content="Extract → Pivot → Enrich → Explain → Detect → Respond. Six connected tools for security analysts. Free. 100% client-side.">
+  <meta property="og:url" content="https://dgiry.github.io">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; background: #0d1117; color: #e6edf3; }
+
+    /* ── Background grid ─────────────────────────────── */
+    .bg-grid {
+      background-image:
+        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    /* ── Shimmer (multi-color pipeline gradient) ─────── */
+    @keyframes shimmer {
+      0%   { background-position: 0% center; }
+      100% { background-position: 200% center; }
+    }
+    .shimmer-suite {
+      background: linear-gradient(90deg,
+        #22d3ee, #818cf8, #fb7185, #f85149, #58a6ff, #f0883e, #22d3ee);
+      background-size: 300% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shimmer 6s linear infinite;
+    }
+
+    /* ── Fade-up ─────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up-1 { animation: fadeUp .5s ease both; }
+    .fade-up-2 { animation: fadeUp .5s .1s ease both; }
+    .fade-up-3 { animation: fadeUp .5s .2s ease both; }
+    .fade-up-4 { animation: fadeUp .5s .3s ease both; }
+    .fade-up-5 { animation: fadeUp .5s .4s ease both; }
+
+    /* ── Blobs ───────────────────────────────────────── */
+    .blob {
+      position: absolute; border-radius: 50%;
+      filter: blur(90px); opacity: .08; pointer-events: none;
+    }
+
+    /* ── Tool cards ──────────────────────────────────── */
+    .tool-card {
+      background: rgba(22,27,34,.85);
+      border: 1px solid rgba(48,54,61,.8);
+      border-radius: 14px; padding: 24px;
+      text-decoration: none; color: inherit;
+      display: flex; flex-direction: column; gap: 12px;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+      position: relative; overflow: hidden;
+    }
+    .tool-card::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 3px;
+      background: var(--tool-color, #58a6ff);
+      opacity: 0; transition: opacity .2s;
+    }
+    .tool-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--tool-color, #58a6ff);
+      box-shadow: 0 8px 32px rgba(0,0,0,.4);
+    }
+    .tool-card:hover::before { opacity: 1; }
+
+    .tool-icon { font-size: 2rem; line-height: 1; }
+    .tool-step {
+      font-size: .6rem; font-weight: 800; text-transform: uppercase;
+      letter-spacing: .1em; padding: 2px 8px; border-radius: 4px;
+      background: rgba(255,255,255,.06); color: #8b949e;
+      width: fit-content;
+    }
+    .tool-name {
+      font-size: 1.05rem; font-weight: 800; color: #e6edf3;
+      line-height: 1.2;
+    }
+    .tool-tagline {
+      font-size: .82rem; color: #8b949e; line-height: 1.5;
+    }
+    .tool-io {
+      display: flex; align-items: center; gap: 6px;
+      font-size: .72rem; font-family: 'JetBrains Mono', monospace;
+    }
+    .tool-io-in  { color: #8b949e; }
+    .tool-io-arr { color: #30363d; }
+    .tool-io-out { font-weight: 600; }
+    .tool-cta {
+      margin-top: auto; font-size: .78rem; font-weight: 700;
+      display: flex; align-items: center; gap: 4px;
+      opacity: 0; transition: opacity .2s;
+    }
+    .tool-card:hover .tool-cta { opacity: 1; }
+
+    /* ── Pipeline flow ───────────────────────────────── */
+    .flow-pill {
+      display: flex; align-items: center; gap: 6px;
+      font-size: .75rem; font-weight: 700;
+      padding: 6px 14px; border-radius: 9999px;
+      border: 1px solid rgba(48,54,61,.9);
+      background: rgba(22,27,34,.9);
+      text-decoration: none; color: #8b949e;
+      transition: border-color .2s, color .2s;
+    }
+    .flow-pill:hover {
+      border-color: var(--pill-color, #58a6ff);
+      color: var(--pill-color, #58a6ff);
+    }
+    .flow-arrow { color: #30363d; font-size: 1.1rem; }
+
+    /* ── SecPrior card ───────────────────────────────── */
+    .secprior-card {
+      background: rgba(22,27,34,.6);
+      border: 1px solid rgba(48,54,61,.7);
+      border-radius: 12px; padding: 20px;
+    }
+
+    /* ── CTA button ──────────────────────────────────── */
+    .cta-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #e6edf3; color: #0d1117;
+      font-weight: 800; font-size: .9rem; padding: 12px 24px;
+      border-radius: 10px; text-decoration: none;
+      transition: opacity .15s, transform .15s;
+    }
+    .cta-btn:hover { opacity: .88; transform: translateY(-1px); }
+
+    /* ── Stat badges ─────────────────────────────────── */
+    .stat-badge {
+      font-size: .78rem; font-weight: 700;
+      padding: 4px 12px; border-radius: 9999px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.08);
+      color: #8b949e;
+    }
+  </style>
+</head>
+<body class="bg-grid">
+
+  <!-- ── Hero ──────────────────────────────────────────────────── -->
+  <section class="relative overflow-hidden min-h-screen flex flex-col items-center justify-center px-6 py-24 text-center">
+
+    <!-- Blobs -->
+    <div class="blob w-96 h-96 bg-cyan-400    top-10   -left-32"></div>
+    <div class="blob w-80 h-80 bg-purple-500  top-32    right-0"></div>
+    <div class="blob w-96 h-96 bg-orange-400  bottom-10 -right-24"></div>
+
+    <!-- Badge -->
+    <div class="fade-up-1 inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full text-xs font-bold tracking-widest uppercase"
+         style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#8b949e">
+      🛡️ SecOps AI Suite · Free · 100% client-side
+    </div>
+
+    <!-- H1 -->
+    <h1 class="fade-up-2 text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-none mb-5">
+      Security tools that<br><span class="shimmer-suite">work together.</span>
+    </h1>
+
+    <!-- Subhead -->
+    <p class="fade-up-3 text-lg sm:text-xl text-slate-400 max-w-2xl leading-relaxed mb-8">
+      Six free, AI-powered tools covering the full analyst workflow — from IOC extraction to IR playbook draft. No server. No telemetry. Your API key stays in your browser.
+    </p>
+
+    <!-- Stats -->
+    <div class="fade-up-3 flex flex-wrap justify-center gap-3 mb-10">
+      <span class="stat-badge">6 tools</span>
+      <span class="stat-badge">1 pipeline</span>
+      <span class="stat-badge">100% client-side</span>
+      <span class="stat-badge">MIT License</span>
+    </div>
+
+    <!-- Pipeline pills -->
+    <div class="fade-up-4 flex flex-wrap items-center justify-center gap-2 mb-12">
+      <a href="https://dgiry.github.io/defang-ioc" target="_blank" rel="noopener"
+         class="flow-pill" style="--pill-color:#22d3ee">🧪 Extract</a>
+      <div class="flow-arrow">→</div>
+      <a href="https://dgiry.github.io/ioc-pivot" target="_blank" rel="noopener"
+         class="flow-pill" style="--pill-color:#818cf8">🔭 Pivot</a>
+      <div class="flow-arrow">→</div>
+      <a href="https://dgiry.github.io/cve-enricher" target="_blank" rel="noopener"
+         class="flow-pill" style="--pill-color:#fb7185">🔬 Enrich</a>
+      <div class="flow-arrow">→</div>
+      <a href="https://dgiry.github.io/alert-explainer" target="_blank" rel="noopener"
+         class="flow-pill" style="--pill-color:#f85149">🚨 Explain</a>
+      <div class="flow-arrow">→</div>
+      <a href="https://dgiry.github.io/sigma-generator" target="_blank" rel="noopener"
+         class="flow-pill" style="--pill-color:#58a6ff">✍️ Detect</a>
+      <div class="flow-arrow">→</div>
+      <a href="https://dgiry.github.io/playbook-builder" target="_blank" rel="noopener"
+         class="flow-pill" style="--pill-color:#f0883e">📖 Respond</a>
+    </div>
+
+    <!-- CTA -->
+    <div class="fade-up-5 flex flex-wrap gap-4 justify-center">
+      <a href="#tools" class="cta-btn">Browse the tools ↓</a>
+      <a href="https://github.com/dgiry" target="_blank" rel="noopener"
+         class="text-sm font-semibold text-slate-500 hover:text-white transition-colors self-center">
+        GitHub ↗
+      </a>
+    </div>
+
+  </section>
+
+  <!-- ── Tool Grid ──────────────────────────────────────────────── -->
+  <section id="tools" class="max-w-6xl mx-auto px-6 py-24">
+
+    <div class="text-center mb-16">
+      <div class="text-xs font-bold tracking-widest uppercase mb-3 text-slate-500">The pipeline</div>
+      <h2 class="text-3xl sm:text-4xl font-black tracking-tight">Six tools. One workflow.</h2>
+      <p class="text-slate-500 text-sm mt-3 max-w-xl mx-auto">Each tool solves one step. Together they cover the full analyst response loop — from first IOC to final playbook.</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+
+      <!-- 1 — Defang IOC -->
+      <a href="https://dgiry.github.io/defang-ioc" target="_blank" rel="noopener"
+         class="tool-card" style="--tool-color:#22d3ee">
+        <div class="tool-icon">🧪</div>
+        <div class="tool-step">Step 1 · Extract</div>
+        <div class="tool-name">Defang IOC</div>
+        <div class="tool-tagline">Extract, defang, and refang IOCs from any text. Paste a raw report — get clean, shareable indicators.</div>
+        <div class="tool-io">
+          <span class="tool-io-in">Raw text</span>
+          <span class="tool-io-arr">→</span>
+          <span class="tool-io-out" style="color:#22d3ee">Defanged IOCs</span>
+        </div>
+        <div class="tool-cta" style="color:#22d3ee">Open Defang IOC →</div>
+      </a>
+
+      <!-- 2 — IOC Pivot Hub -->
+      <a href="https://dgiry.github.io/ioc-pivot" target="_blank" rel="noopener"
+         class="tool-card" style="--tool-color:#818cf8">
+        <div class="tool-icon">🔭</div>
+        <div class="tool-step">Step 2 · Pivot</div>
+        <div class="tool-name">IOC Pivot Hub</div>
+        <div class="tool-tagline">One IOC → 30+ threat intelligence platforms. VirusTotal, Shodan, AbuseIPDB, URLhaus, and more — in one click.</div>
+        <div class="tool-io">
+          <span class="tool-io-in">IP / domain / hash</span>
+          <span class="tool-io-arr">→</span>
+          <span class="tool-io-out" style="color:#818cf8">30+ intel links</span>
+        </div>
+        <div class="tool-cta" style="color:#818cf8">Open IOC Pivot →</div>
+      </a>
+
+      <!-- 3 — CVE Enricher -->
+      <a href="https://dgiry.github.io/cve-enricher" target="_blank" rel="noopener"
+         class="tool-card" style="--tool-color:#fb7185">
+        <div class="tool-icon">🔬</div>
+        <div class="tool-step">Step 3 · Enrich</div>
+        <div class="tool-name">CVE Enricher</div>
+        <div class="tool-tagline">Full CVE context: CVSS score, KEV status, threat actors exploiting it, affected products, and patch priority.</div>
+        <div class="tool-io">
+          <span class="tool-io-in">CVE-YYYY-NNNNN</span>
+          <span class="tool-io-arr">→</span>
+          <span class="tool-io-out" style="color:#fb7185">Patch priority + actors</span>
+        </div>
+        <div class="tool-cta" style="color:#fb7185">Open CVE Enricher →</div>
+      </a>
+
+      <!-- 4 — Alert Explainer -->
+      <a href="https://dgiry.github.io/alert-explainer" target="_blank" rel="noopener"
+         class="tool-card" style="--tool-color:#f85149">
+        <div class="tool-icon">🚨</div>
+        <div class="tool-step">Step 4 · Explain</div>
+        <div class="tool-name">Alert Explainer</div>
+        <div class="tool-tagline">Paste any SIEM alert — get a plain-English explanation, MITRE mapping, false positive check, and triage priority.</div>
+        <div class="tool-io">
+          <span class="tool-io-in">SIEM alert</span>
+          <span class="tool-io-arr">→</span>
+          <span class="tool-io-out" style="color:#f85149">Triage + MITRE mapping</span>
+        </div>
+        <div class="tool-cta" style="color:#f85149">Open Alert Explainer →</div>
+      </a>
+
+      <!-- 5 — SIGMA Generator -->
+      <a href="https://dgiry.github.io/sigma-generator" target="_blank" rel="noopener"
+         class="tool-card" style="--tool-color:#58a6ff">
+        <div class="tool-icon">✍️</div>
+        <div class="tool-step">Step 5 · Detect</div>
+        <div class="tool-name">SIGMA Generator</div>
+        <div class="tool-tagline">Describe an attack or paste an alert — get a ready-to-use SIGMA rule converted to 7 platforms. Bridges directly to Playbook Builder.</div>
+        <div class="tool-io">
+          <span class="tool-io-in">Attack description</span>
+          <span class="tool-io-arr">→</span>
+          <span class="tool-io-out" style="color:#58a6ff">SIGMA · SPL · KQL · XDR</span>
+        </div>
+        <div class="tool-cta" style="color:#58a6ff">Open SIGMA Generator →</div>
+      </a>
+
+      <!-- 6 — Playbook Builder -->
+      <a href="https://dgiry.github.io/playbook-builder" target="_blank" rel="noopener"
+         class="tool-card" style="--tool-color:#f0883e">
+        <div class="tool-icon">📖</div>
+        <div class="tool-step">Step 6 · Respond</div>
+        <div class="tool-name">Playbook Builder</div>
+        <div class="tool-tagline">MITRE technique, incident description, or SIGMA rule → structured 6-phase IR playbook draft. A starting point — not autopilot.</div>
+        <div class="tool-io">
+          <span class="tool-io-in">MITRE / incident / SIGMA</span>
+          <span class="tool-io-arr">→</span>
+          <span class="tool-io-out" style="color:#f0883e">6-phase IR draft</span>
+        </div>
+        <div class="tool-cta" style="color:#f0883e">Open Playbook Builder →</div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ── How the pipeline flows ─────────────────────────────────── -->
+  <section class="max-w-4xl mx-auto px-6 py-8 pb-24">
+
+    <div class="rounded-xl px-6 py-6" style="background:rgba(22,27,34,.7);border:1px solid rgba(48,54,61,.8)">
+      <div class="text-xs font-bold tracking-widest uppercase mb-5 text-slate-500 text-center">How the pipeline flows</div>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+
+        <div>
+          <div class="font-bold text-white mb-1">📍 Alert fires</div>
+          <p class="text-slate-500 text-xs leading-relaxed">A SIEM alert or threat report arrives. You need to move fast.</p>
+          <div class="mt-2 text-xs font-mono text-slate-600">🧪 Extract IOCs → 🔭 Pivot to intel</div>
+        </div>
+
+        <div>
+          <div class="font-bold text-white mb-1">🔍 Enrich and understand</div>
+          <p class="text-slate-500 text-xs leading-relaxed">CVE context, MITRE mapping, triage priority — without leaving the browser.</p>
+          <div class="mt-2 text-xs font-mono text-slate-600">🔬 Enrich CVE → 🚨 Explain alert</div>
+        </div>
+
+        <div>
+          <div class="font-bold text-white mb-1">📋 Detect and respond</div>
+          <p class="text-slate-500 text-xs leading-relaxed">Turn the alert into a detection rule, then into a structured response draft.</p>
+          <div class="mt-2 text-xs font-mono text-slate-600">✍️ Generate SIGMA → 📖 Build playbook</div>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── Also built ─────────────────────────────────────────────── -->
+  <section class="max-w-6xl mx-auto px-6 pb-24">
+
+    <div class="text-center mb-10">
+      <div class="text-xs font-bold tracking-widest uppercase mb-3 text-slate-500">Also built</div>
+      <h2 class="text-2xl sm:text-3xl font-black tracking-tight">Related tools</h2>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-2xl mx-auto">
+
+      <div class="secprior-card">
+        <div class="text-2xl mb-2">🎯</div>
+        <div class="font-bold text-white mb-1">SecPrior</div>
+        <p class="text-sm text-slate-500 leading-relaxed">Vulnerability prioritization and risk scoring. Helps security teams focus remediation effort on what matters most.</p>
+        <a href="https://dgiry.github.io/secprior" target="_blank" rel="noopener"
+           class="text-xs font-bold text-slate-400 hover:text-white transition-colors mt-3 inline-block">
+          Open SecPrior →
+        </a>
+      </div>
+
+      <div class="secprior-card" style="border-style:dashed;opacity:.5">
+        <div class="text-2xl mb-2">🔧</div>
+        <div class="font-bold text-white mb-1">More coming</div>
+        <p class="text-sm text-slate-500 leading-relaxed">The suite keeps growing. Star the GitHub repo to follow along.</p>
+        <a href="https://github.com/dgiry" target="_blank" rel="noopener"
+           class="text-xs font-bold text-slate-400 hover:text-white transition-colors mt-3 inline-block">
+          Follow on GitHub →
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Final CTA ──────────────────────────────────────────────── -->
+  <section class="max-w-2xl mx-auto px-6 py-24 text-center">
+    <h2 class="text-4xl sm:text-5xl font-black tracking-tight mb-4 leading-tight">
+      One workflow.<br><span class="shimmer-suite">End to end.</span>
+    </h2>
+    <p class="text-slate-500 mb-10 leading-relaxed">No accounts. No telemetry. Your OpenAI key stays in your browser.<br>Each tool works standalone — or as part of the full pipeline.</p>
+    <a href="#tools" class="cta-btn">Start with a tool ↑</a>
+  </section>
+
+  <!-- ── Footer ─────────────────────────────────────────────────── -->
+  <footer class="border-t border-slate-800 py-8 text-center text-sm text-slate-600">
+    <a href="https://dgiry.github.io/defang-ioc"      class="hover:text-slate-400 transition-colors">🧪 Defang IOC</a> ·
+    <a href="https://dgiry.github.io/ioc-pivot"       class="hover:text-slate-400 transition-colors">🔭 IOC Pivot</a> ·
+    <a href="https://dgiry.github.io/cve-enricher"    class="hover:text-slate-400 transition-colors">🔬 CVE Enricher</a> ·
+    <a href="https://dgiry.github.io/alert-explainer"  class="hover:text-slate-400 transition-colors">🚨 Alert Explainer</a> ·
+    <a href="https://dgiry.github.io/sigma-generator"  class="hover:text-slate-400 transition-colors">✍️ SIGMA Generator</a> ·
+    <a href="https://dgiry.github.io/playbook-builder" class="hover:text-slate-400 transition-colors">📖 Playbook Builder</a>
+    <br class="mt-2">
+    <span class="text-slate-700">· 100% client-side · MIT License · <a href="https://github.com/dgiry" class="hover:text-slate-400 transition-colors">github.com/dgiry</a></span>
+  </footer>
+
+</body>
+</html>
