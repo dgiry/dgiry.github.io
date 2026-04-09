@@ -260,6 +260,14 @@
         </a>
         <div class="pipe-connector"></div>
 
+        <a href="https://dgiry.github.io/threat-actor-profiler" target="_blank" rel="noopener" class="pipe-node" style="text-decoration:none">
+          <div class="pipe-node-dot" style="background:#bc8cff;box-shadow:0 0 6px #bc8cff88"></div>
+          <span class="pipe-node-label" style="color:#bc8cff">Profile</span>
+          <span class="pipe-node-name">🕵️ Threat Actor Profiler</span>
+          <span class="pipe-node-snippet">APT28 · TTPs · Campaigns</span>
+        </a>
+        <div class="pipe-connector"></div>
+
         <a href="https://dgiry.github.io/cve-enricher" target="_blank" rel="noopener" class="pipe-node" style="text-decoration:none">
           <div class="pipe-node-dot" style="background:#fb7185;box-shadow:0 0 6px #fb718588"></div>
           <span class="pipe-node-label" style="color:#fb7185">Enrich</span>
@@ -353,11 +361,30 @@
         <div class="tool-cta" style="color:#818cf8">Open IOC Pivot →</div>
       </a>
 
-      <!-- 3 — CVE Enricher -->
+      <!-- 3 — Threat Actor Profiler -->
+      <a href="https://dgiry.github.io/threat-actor-profiler" target="_blank" rel="noopener"
+         class="tool-card" style="--tool-color:#bc8cff">
+        <div class="tool-icon">🕵️</div>
+        <div class="tool-step">Step 3 · Profile</div>
+        <div class="tool-name">Threat Actor Profiler</div>
+        <div class="tool-tagline">Actor name → aliases, MITRE techniques, tooling, campaigns, infrastructure patterns, and actionable hunting pivots.</div>
+        <div class="tool-io">
+          <span class="tool-io-in">APT28, LockBit…</span>
+          <span class="tool-io-arr">→</span>
+          <span class="tool-io-out" style="color:#bc8cff">TTPs + hunting pivots</span>
+        </div>
+        <div class="tool-preview">
+          <span style="color:#bc8cff">T1566.001</span> Spearphishing · T1059<br>
+          Tooling: Mimikatz · Cobalt Strike
+        </div>
+        <div class="tool-cta" style="color:#bc8cff">Open Threat Actor Profiler →</div>
+      </a>
+
+      <!-- 4 — CVE Enricher -->
       <a href="https://dgiry.github.io/cve-enricher" target="_blank" rel="noopener"
          class="tool-card" style="--tool-color:#fb7185">
         <div class="tool-icon">🔬</div>
-        <div class="tool-step">Step 3 · Enrich</div>
+        <div class="tool-step">Step 4 · Enrich</div>
         <div class="tool-name">CVE Enricher</div>
         <div class="tool-tagline">Full CVE context: CVSS score, KEV status, threat actors exploiting it, affected products, and patch priority.</div>
         <div class="tool-io">
@@ -376,7 +403,7 @@
       <a href="https://dgiry.github.io/alert-explainer" target="_blank" rel="noopener"
          class="tool-card" style="--tool-color:#f85149">
         <div class="tool-icon">🚨</div>
-        <div class="tool-step">Step 4 · Explain</div>
+        <div class="tool-step">Step 5 · Explain</div>
         <div class="tool-name">Alert Explainer</div>
         <div class="tool-tagline">Paste any SIEM alert — get a plain-English explanation, MITRE mapping, false positive check, and triage priority.</div>
         <div class="tool-io">
@@ -395,7 +422,7 @@
       <a href="https://dgiry.github.io/sigma-generator" target="_blank" rel="noopener"
          class="tool-card" style="--tool-color:#58a6ff">
         <div class="tool-icon">✍️</div>
-        <div class="tool-step">Step 5 · Detect</div>
+        <div class="tool-step">Step 6 · Detect</div>
         <div class="tool-name">SIGMA Generator</div>
         <div class="tool-tagline">Describe an attack or paste an alert — get a ready-to-use SIGMA rule converted to 7 platforms. Bridges directly to Playbook Builder.</div>
         <div class="tool-io">
@@ -415,7 +442,7 @@
       <a href="https://dgiry.github.io/playbook-builder" target="_blank" rel="noopener"
          class="tool-card" style="--tool-color:#f0883e">
         <div class="tool-icon">📖</div>
-        <div class="tool-step">Step 6 · Respond</div>
+        <div class="tool-step">Step 7 · Respond</div>
         <div class="tool-name">Playbook Builder</div>
         <div class="tool-tagline">MITRE technique, incident description, or SIGMA rule → structured 6-phase IR playbook draft. A starting point — not autopilot.</div>
         <div class="tool-io">
@@ -535,12 +562,13 @@
 
   <!-- ── Footer ─────────────────────────────────────────────────── -->
   <footer class="border-t border-slate-800 py-8 text-center text-sm text-slate-600">
-    <a href="https://dgiry.github.io/defang-ioc"      class="hover:text-slate-400 transition-colors">🧪 Defang IOC</a> ·
-    <a href="https://dgiry.github.io/ioc-pivot"       class="hover:text-slate-400 transition-colors">🔭 IOC Pivot</a> ·
-    <a href="https://dgiry.github.io/cve-enricher"    class="hover:text-slate-400 transition-colors">🔬 CVE Enricher</a> ·
-    <a href="https://dgiry.github.io/alert-explainer"  class="hover:text-slate-400 transition-colors">🚨 Alert Explainer</a> ·
-    <a href="https://dgiry.github.io/sigma-generator"  class="hover:text-slate-400 transition-colors">✍️ SIGMA Generator</a> ·
-    <a href="https://dgiry.github.io/playbook-builder" class="hover:text-slate-400 transition-colors">📖 Playbook Builder</a>
+    <a href="https://dgiry.github.io/defang-ioc"             class="hover:text-slate-400 transition-colors">🧪 Defang IOC</a> ·
+    <a href="https://dgiry.github.io/ioc-pivot"              class="hover:text-slate-400 transition-colors">🔭 IOC Pivot</a> ·
+    <a href="https://dgiry.github.io/threat-actor-profiler"  class="hover:text-slate-400 transition-colors">🕵️ Threat Actor Profiler</a> ·
+    <a href="https://dgiry.github.io/cve-enricher"           class="hover:text-slate-400 transition-colors">🔬 CVE Enricher</a> ·
+    <a href="https://dgiry.github.io/alert-explainer"        class="hover:text-slate-400 transition-colors">🚨 Alert Explainer</a> ·
+    <a href="https://dgiry.github.io/sigma-generator"        class="hover:text-slate-400 transition-colors">✍️ SIGMA Generator</a> ·
+    <a href="https://dgiry.github.io/playbook-builder"       class="hover:text-slate-400 transition-colors">📖 Playbook Builder</a>
     <br class="mt-2">
     <span class="text-slate-700">· 100% client-side · MIT License · <a href="https://github.com/dgiry" class="hover:text-slate-400 transition-colors">github.com/dgiry</a></span>
   </footer>
